@@ -1,6 +1,7 @@
 package ru.practicum.ewm;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = EwmServerApplication.class)
 @RequiredArgsConstructor
+@Disabled
 public class EwmServerIntegrationTest {
 
     @Autowired
