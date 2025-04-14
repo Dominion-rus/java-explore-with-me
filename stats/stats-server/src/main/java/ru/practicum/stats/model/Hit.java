@@ -23,6 +23,6 @@ public class Hit {
 
     private String ip;
 
-    @Column(name = "timestamp")
+    @Column(name = "hit_timestamp")
     private LocalDateTime timestamp;
 }

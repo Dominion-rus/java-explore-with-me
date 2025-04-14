@@ -1,10 +1,7 @@
 -- Удаляем таблицы, если они существуют
-DROP TABLE IF EXISTS hits;
+DROP TABLE IF EXISTS test_table;
 
-CREATE TABLE IF NOT EXISTS hits (
+CREATE TABLE IF NOT EXISTS test_table (
     id SERIAL PRIMARY KEY,
-    app VARCHAR(255) NOT NULL,
-    uri VARCHAR(512) NOT NULL,
-    ip VARCHAR(64) NOT NULL,
-    timestamp TIMESTAMP NOT NULL
+    app VARCHAR(255) NOT NULL
 );

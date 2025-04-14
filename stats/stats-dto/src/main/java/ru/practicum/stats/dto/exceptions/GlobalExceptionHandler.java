@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler
     public ResponseEntity<Map<String, Object>> handleNotFoundException(NotFoundException ex) {
         Map<String, Object> error = new HashMap<>();
         error.put("success",false);
@@ -24,7 +25,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
+    @ExceptionHandler
     public ResponseEntity<Map<String, Object>> handleAccessDenied(AccessDeniedException ex) {
         Map<String, Object> error = new HashMap<>();
         error.put("success",false);
@@ -34,7 +35,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler
     public ResponseEntity<Map<String, Object>> handleAllExceptions(Exception ex) {
         Map<String, Object> error = new HashMap<>();
         error.put("success",false);
@@ -44,9 +45,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
+    @ExceptionHandler
     public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(
-            org.springframework.web.bind.MethodArgumentNotValidException ex) {
+           MethodArgumentNotValidException ex) {
         StringBuilder messageBuilder = new StringBuilder("Validation failed for fields: ");
         ex.getBindingResult().getFieldErrors().forEach(error -> {
             messageBuilder.append(error.getField())
@@ -67,7 +68,7 @@ public class GlobalExceptionHandler {
                 .body(response);
     }
 
-    @ExceptionHandler(ValidateException.class)
+    @ExceptionHandler
     public ResponseEntity<Map<String, Object>> handleValidateException(ValidateException ex) {
         Map<String, Object> error = new HashMap<>();
         error.put("success",false);
