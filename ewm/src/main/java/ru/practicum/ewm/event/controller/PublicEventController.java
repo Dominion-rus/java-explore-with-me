@@ -35,13 +35,7 @@ public class PublicEventController {
             throw new BadRequestException("rangeEnd must not be before rangeStart");
         }
 
-        // Отправка информации в stats
-        statsClient.saveHit(EndpointHitDto.builder()
-                .app("ewm-main-service")
-                .uri(servletRequest.getRequestURI())
-                .ip(servletRequest.getRemoteAddr())
-                .timestamp(LocalDateTime.now())
-                .build());
+        sendStatsHit(servletRequest);
 
         return eventService.searchPublicEvents(request);
     }
@@ -49,14 +43,18 @@ public class PublicEventController {
     @GetMapping("/{id}")
     public EventFullDto getEventById(@PathVariable Long id,
                                      HttpServletRequest servletRequest) {
-        // Отправка информации в stats
-        statsClient.saveHit(EndpointHitDto.builder()
-                .app("ewm-main-service")
-                .uri(servletRequest.getRequestURI())
-                .ip(servletRequest.getRemoteAddr())
-                .timestamp(LocalDateTime.now())
-                .build());
+
+        sendStatsHit(servletRequest);
 
         return eventService.getEventById(id, servletRequest.getRemoteAddr(), servletRequest.getRequestURI());
+    }
+
+    private void sendStatsHit(HttpServletRequest request) {
+        statsClient.saveHit(EndpointHitDto.builder()
+                .app("ewm-main-service")
+                .uri(request.getRequestURI())
+                .ip(request.getRemoteAddr())
+                .timestamp(LocalDateTime.now())
+                .build());
     }
 }

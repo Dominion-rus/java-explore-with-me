@@ -34,9 +34,6 @@ public class StatsController {
             @RequestParam(required = false) List<String> uris,
             @RequestParam(defaultValue = "false") boolean unique
     ) {
-        if (start == null || end == null) {
-            throw new BadRequestException("Start and end dates must not be null");
-        }
 
         if (end.isBefore(start)) {
             throw new BadRequestException("End date must not be before start date");

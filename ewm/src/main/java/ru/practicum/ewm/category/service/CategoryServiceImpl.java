@@ -12,18 +12,21 @@ import ru.practicum.ewm.category.repository.CategoryRepository;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.stats.dto.exceptions.ConflictException;
 import ru.practicum.stats.dto.exceptions.NotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository repository;
     private final EventRepository eventRepository;
 
     @Override
+    @Transactional
     public CategoryDto create(NewCategoryDto dto) {
         if (repository.existsByName(dto.getName())) {
             throw new ConflictException("Category with this name already exists");
@@ -33,6 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto update(Long id, CategoryDto dto) {
         Category category = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category not found"));
@@ -45,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         if (!repository.existsById(id)) {
             throw new NotFoundException("Category not found");
