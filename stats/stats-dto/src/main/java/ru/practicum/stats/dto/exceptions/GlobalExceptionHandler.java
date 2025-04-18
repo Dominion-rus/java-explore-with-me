@@ -6,9 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,4 +101,33 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<Map<String, Object>> handleConflictException(ConflictException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("success",false);
+        error.put("error", "Conflict error");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Map<String, Object>> handleMissingServletRequestParameter(MissingServletRequestParameterException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("success", false);
+        error.put("error", "Bad request");
+        error.put("message", "Missing required request parameter: " + ex.getParameterName());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Map<String, Object>> handleBadRequest(BadRequestException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("success", false);
+        error.put("error", "Bad request");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+
 }
