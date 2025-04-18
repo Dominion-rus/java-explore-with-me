@@ -1,5 +1,5 @@
 -- Удаляем таблицы, если они существуют
-DROP TABLE IF EXISTS users, categories, events, requests, compilations, compilation_events;
+DROP TABLE IF EXISTS users, categories, events, requests, compilations, compilation_events, comments;
 
 -- Пользователи
 CREATE TABLE IF NOT EXISTS users (
@@ -57,4 +57,23 @@ CREATE TABLE IF NOT EXISTS compilation_events (
     event_id BIGINT NOT NULL REFERENCES events(id) ON DELETE CASCADE,
     PRIMARY KEY (compilation_id, event_id)
 );
+
+-- Комментарии
+CREATE TABLE IF NOT EXISTS comments (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    author_id BIGINT NOT NULL,
+    event_id BIGINT NOT NULL,
+    text TEXT NOT NULL,
+    created_on TIMESTAMP NOT NULL,
+    updated_on TIMESTAMP,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    moderator_comment TEXT,
+
+    CONSTRAINT fk_comment_author FOREIGN KEY (author_id)
+        REFERENCES users(id) ON DELETE CASCADE,
+
+    CONSTRAINT fk_comment_event FOREIGN KEY (event_id)
+        REFERENCES events(id) ON DELETE CASCADE
+);
+
 
